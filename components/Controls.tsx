@@ -88,7 +88,6 @@ export default function Controls({ setTrades, maxTrades }: ControlsProps) {
       ws.onopen = () => {
         setConnectionStatus(ConnectionStatus.CONNECTED)
         setError(null)
-        console.log('WebSocket connected')
       }
 
       ws.onmessage = event => {
@@ -104,12 +103,11 @@ export default function Controls({ setTrades, maxTrades }: ControlsProps) {
             })
           }
         } catch (err) {
-          console.error('Error processing message:', err)
+          // Error processing message
         }
       }
 
       ws.onerror = error => {
-        console.error('WebSocket error:', error)
         setConnectionStatus(ConnectionStatus.ERROR)
         setError('WebSocket connection error')
       }
@@ -119,7 +117,6 @@ export default function Controls({ setTrades, maxTrades }: ControlsProps) {
         if (event.code !== WS_CLOSE_NORMAL) {
           setError(`Connection closed: ${event.reason || 'Unknown reason'}`)
         }
-        console.log('WebSocket disconnected')
       }
     } catch (err) {
       setConnectionStatus(ConnectionStatus.ERROR)

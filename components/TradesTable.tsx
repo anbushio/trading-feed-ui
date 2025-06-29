@@ -50,7 +50,6 @@ export default function TradesTable({
   }
 
   const handleFiltersChange = (filters: FilterState) => {
-    console.log('filters', filters)
     setActiveFilters(filters)
   }
 

@@ -71,7 +71,6 @@ export default function FilterTable({
                     : ''
                 }
                 onValueChange={(value: string) => {
-                  console.log('value', value)
                   if (value === 'all') {
                     setPendingFilters(prev => ({ ...prev, symbols: [] }))
                   } else {

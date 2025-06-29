@@ -4,8 +4,6 @@ const { v4: uuidv4 } = require('uuid')
 // Create WebSocket server
 const wss = new WebSocket.Server({ port: 8080 })
 
-console.log('Mock WebSocket server running on ws://localhost:8080')
-
 // Trading symbols to simulate
 const symbols = ['BTC/USD', 'ETH/USD', 'ADA/USD', 'DOT/USD', 'LINK/USD']
 const exchanges = ['Binance', 'Coinbase', 'Kraken', 'Bitfinex']
@@ -58,8 +56,6 @@ function generateTrade() {
 
 // Handle WebSocket connections
 wss.on('connection', ws => {
-  console.log('Client connected')
-
   // Send initial connection message
   ws.send(
     JSON.stringify({
@@ -79,7 +75,6 @@ wss.on('connection', ws => {
 
   // Handle client disconnect
   ws.on('close', () => {
-    console.log('Client disconnected')
     clearInterval(interval)
   })
 
@@ -87,7 +82,6 @@ wss.on('connection', ws => {
   ws.on('message', message => {
     try {
       const data = JSON.parse(message)
-      console.log('Received message:', data)
 
       // Echo back with timestamp
       ws.send(
@@ -98,22 +92,19 @@ wss.on('connection', ws => {
         })
       )
     } catch (error) {
-      console.error('Error parsing message:', error)
+      // Error parsing message
     }
   })
 
   // Handle errors
   ws.on('error', error => {
-    console.error('WebSocket error:', error)
     clearInterval(interval)
   })
 })
 
 // Graceful shutdown
 process.on('SIGINT', () => {
-  console.log('\nShutting down mock server...')
   wss.close(() => {
-    console.log('Mock server closed')
     process.exit(0)
   })
 })
