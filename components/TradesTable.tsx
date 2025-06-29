@@ -76,7 +76,7 @@ export default function TradesTable({
                 <p className="mt-1">
                   {activeFiltersCount() > 0
                     ? `Showing ${filteredTrades.length} of ${trades.length} (max ${maxTrades})`
-                    : `Showing ${trades.length} trades (max ${maxTrades})`}
+                    : `Showing ${trades.length >= maxTrades ? maxTrades : trades.length} trades (max ${maxTrades})`}
                 </p>
               </CardDescription>
             </div>
