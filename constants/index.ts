@@ -1,0 +1,9 @@
+// WebSocket and connection constants
+export const MAX_TRADES = 100
+
+// WebSocket close codes
+export const WS_CLOSE_NORMAL = 1000
+export const WS_CLOSE_USER_DISCONNECT = "User disconnected"
+
+// Default values
+export const DEFAULT_EXCHANGE = "unknown" 

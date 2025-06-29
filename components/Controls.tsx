@@ -7,18 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Wifi, WifiOff } from "lucide-react"
-
-type ConnectionStatus = "disconnected" | "connecting" | "connected" | "error"
-
-interface Trade {
-  id: string
-  timestamp: number
-  symbol: string
-  price: number
-  quantity: number
-  side: "buy" | "sell"
-  exchange?: string
-}
+import { Trade, ConnectionStatus } from "@/types"
+import { WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT } from "@/constants"
 
 interface ControlsProps {
   wsUrl: string
@@ -110,7 +100,7 @@ export default function Controls({
 
       ws.onclose = (event) => {
         setConnectionStatus("disconnected")
-        if (event.code !== 1000) {
+        if (event.code !== WS_CLOSE_NORMAL) {
           setError(`Connection closed: ${event.reason || "Unknown reason"}`)
         }
         console.log("WebSocket disconnected")
@@ -123,7 +113,7 @@ export default function Controls({
 
   const disconnect = useCallback(() => {
     if (wsRef.current) {
-      wsRef.current.close(1000, "User disconnected")
+      wsRef.current.close(WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT)
       wsRef.current = null
     }
     setConnectionStatus("disconnected")
