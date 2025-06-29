@@ -3,11 +3,11 @@
 import { useState } from "react"
 import Header from "@/components/Header"
 import Controls from "@/components/Controls"
+import TradesTable from "@/components/TradesTable"
 import { Trade, TradeSide } from "@/types"
 import { MAX_TRADES, DEFAULT_EXCHANGE } from "@/constants"
 
 export default function Dashboard() {
-  const [wsUrl, setWsUrl] = useState("")
   const [trades, setTrades] = useState<Trade[]>([])
 
   const parseTradeMessage = (data: any): Trade | null => {
@@ -26,18 +26,26 @@ export default function Dashboard() {
     return null
   }
 
+  const clearTrades = () => {
+    setTrades([])
+  }
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <Header />
         {/* Controls */}
-        <Controls 
-          wsUrl={wsUrl}
-          setWsUrl={setWsUrl}
+        <Controls
           setTrades={setTrades}
           maxTrades={MAX_TRADES}
           parseTradeMessage={parseTradeMessage}
+        />
+        {/* Trades feed */}
+        <TradesTable 
+          trades={trades}
+          maxTrades={MAX_TRADES}
+          onClearTrades={clearTrades}
         />
       </div>
     </div>

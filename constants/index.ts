@@ -1,5 +1,5 @@
 // WebSocket and connection constants
-export const MAX_TRADES = 100
+export const MAX_TRADES = 10
 
 // WebSocket close codes
 export const WS_CLOSE_NORMAL = 1000

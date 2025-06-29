@@ -11,20 +11,17 @@ import { Trade, ConnectionStatus } from "@/types"
 import { WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT } from "@/constants"
 
 interface ControlsProps {
-  wsUrl: string
-  setWsUrl: (url: string) => void
   setTrades: React.Dispatch<React.SetStateAction<Trade[]>>
   maxTrades: number
   parseTradeMessage: (data: any) => Trade | null
 }
 
 export default function Controls({
-  wsUrl,
-  setWsUrl,
   setTrades,
   maxTrades,
   parseTradeMessage
 }: ControlsProps) {
+  const [wsUrl, setWsUrl] = useState("")
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected")
   const [error, setError] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
