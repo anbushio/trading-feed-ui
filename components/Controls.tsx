@@ -32,11 +32,11 @@ export default function Controls({ setTrades, maxTrades }: ControlsProps) {
   const getStatusIcon = (status: ConnectionStatus) => {
     switch (status) {
       case ConnectionStatus.CONNECTED:
-        return <Wifi className="h-4 w-4 ml-2" />
+        return <Wifi className="h-4 w-4 sm:ml-2" />
       case ConnectionStatus.CONNECTING:
-        return <Wifi className="h-4 w-4 ml-2 animate-pulse" />
+        return <Wifi className="h-4 w-4 sm:ml-2 animate-pulse" />
       default:
-        return <WifiOff className="h-4 w-4 ml-2" />
+        return <WifiOff className="h-4 w-4 sm:ml-2" />
     }
   }
 
@@ -145,7 +145,9 @@ export default function Controls({ setTrades, maxTrades }: ControlsProps) {
             variant="outline"
             className={`ml-auto ${getStatusColor(connectionStatus)} text-white flex items-center`}
           >
-            <span className="mr-2">{connectionStatus.toUpperCase()}</span>{' '}
+            <span className="mr-2 max-sm:hidden">
+              {connectionStatus.toUpperCase()}
+            </span>{' '}
             {getStatusIcon(connectionStatus)}
           </Badge>
         </CardTitle>

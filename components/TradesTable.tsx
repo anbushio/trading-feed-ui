@@ -70,7 +70,7 @@ export default function TradesTable({
     <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between max-sm:flex-col max-sm:text-center">
             <div>
               <CardTitle>Live Trades Dashboard</CardTitle>
               <CardDescription>
@@ -81,7 +81,7 @@ export default function TradesTable({
                 </p>
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 max-sm:mt-4">
               <div className="relative pr-2">
                 {activeFiltersCount() > 0 && (
                   <Badge variant="secondary">
@@ -114,8 +114,8 @@ export default function TradesTable({
                 </Button>
               </CollapsibleTrigger>
               <Button onClick={onClearTrades} variant="outline" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Clear
+                <Trash2 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:block">Clear</span>
               </Button>
             </div>
           </div>
