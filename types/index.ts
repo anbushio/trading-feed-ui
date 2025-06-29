@@ -13,6 +13,14 @@ export interface Trade {
   exchange: string // e.g. 'Binance', 'Coinbase'
 }
 
+export interface FilterState {
+  symbols: string[]
+  sides: string[]
+  timeRange: { minutes: number | null }
+  priceRange: { min: number | null; max: number | null }
+  quantityRange: { min: number | null; max: number | null }
+}
+
 export type ConnectionStatus =
   | 'disconnected'
   | 'connecting'
