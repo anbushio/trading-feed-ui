@@ -6,6 +6,10 @@ A modern, real-time trading dashboard built with Next.js, TypeScript, and Tailwi
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)
 
+## 🌐 Live Demo
+
+**🚀 [View Live Demo](https://trading-feed-tau.vercel.app/)**
+
 ## ✨ Features
 
 - **Real-time Trading Data**: Connect to any WebSocket trading feed for live market data
@@ -26,6 +30,7 @@ A modern, real-time trading dashboard built with Next.js, TypeScript, and Tailwi
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **WebSocket**: Native WebSocket API
 - **Development**: Turbopack for fast development builds
+- **Deployment**: [Vercel](https://vercel.com) for seamless hosting
 
 ## 🚀 Quick Start
 
@@ -116,34 +121,6 @@ pnpm format:check # Check code formatting
 - **Price Range**: Set minimum and maximum price filters
 - **Quantity Range**: Filter by trade size
 
-### Connection Management
-
-- WebSocket connection status monitoring
-- Automatic reconnection handling
-- Error handling and user feedback
-- Graceful disconnection
-
-## 🏗️ Project Structure
-
-```
-trading-feed-ui/
-├── app/                    # Next.js App Router
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   ├── Controls.tsx      # Connection controls
-│   ├── FilterTable.tsx   # Filter interface
-│   ├── Header.tsx        # App header
-│   └── TradesTable.tsx   # Main trades table
-├── constants/            # Application constants
-├── lib/                  # Utility libraries
-├── mock-server/          # Mock WebSocket server
-├── types/                # TypeScript type definitions
-└── utils/                # Utility functions
-```
-
 ## 🎨 UI Components
 
 The application uses a custom UI component library built with:
@@ -176,35 +153,3 @@ The application supports any WebSocket trading feed that sends JSON messages in 
 1. Push your code to GitHub
 2. Connect your repository to [Vercel](https://vercel.com)
 3. Deploy automatically on every push
-
-### Other Platforms
-
-Build the application:
-
-```bash
-pnpm build
-pnpm start
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) for the amazing React framework
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- [Radix UI](https://www.radix-ui.com/) for accessible UI components
-- [Lucide](https://lucide.dev/) for beautiful icons
-
----
-
-**Happy Trading! 📈**
