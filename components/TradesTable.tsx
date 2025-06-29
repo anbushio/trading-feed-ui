@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -24,12 +24,8 @@ import { FilterState, Trade } from '@/types'
 import FilterTable from './FilterTable'
 import { Collapsible, CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { INITIAL_FILTER } from '@/constants'
-import {
-  getActiveFiltersCount,
-  formatTime,
-  formatPrice,
-  formatQuantity,
-} from '@/lib/utils'
+import { filterTrades, getActiveFiltersCount } from '@/utils/filter'
+import { formatTime, formatPrice, formatQuantity } from '@/utils/format'
 
 interface TradesTableProps {
   trades: Trade[]
@@ -49,11 +45,26 @@ export default function TradesTable({
   const clearAllFilters = () => {
     setActiveFilters(INITIAL_FILTER)
   }
+  const onFilterApply = () => {
+    setIsFiltersOpen(false)
+  }
 
   const handleFiltersChange = (filters: FilterState) => {
     console.log('filters', filters)
     setActiveFilters(filters)
   }
+
+  const applyFilters = useCallback(
+    (tradesToFilter: Trade[]) => {
+      return tradesToFilter.filter(trade => filterTrades(trade, activeFilters))
+    },
+    [activeFilters]
+  )
+  const activeFiltersCount = useCallback(() => {
+    return getActiveFiltersCount(activeFilters)
+  }, [activeFilters])
+
+  const filteredTrades = applyFilters(trades).slice(0, maxTrades)
 
   return (
     <Collapsible open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
@@ -63,20 +74,25 @@ export default function TradesTable({
             <div>
               <CardTitle>Live Trades Dashboard</CardTitle>
               <CardDescription>
-                Showing {trades.length} recent trades (max {maxTrades})
+                <p className="mt-1">
+                  {activeFiltersCount() > 0
+                    ? `Showing ${filteredTrades.length} of ${trades.length} (max ${maxTrades})`
+                    : `Showing ${trades.length} trades (max ${maxTrades})`}
+                </p>
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <div>
-                {getActiveFiltersCount(activeFilters) > 0 && (
+              <div className="relative pr-2">
+                {activeFiltersCount() > 0 && (
                   <Badge variant="secondary">
-                    {getActiveFiltersCount(activeFilters)} active
+                    {activeFiltersCount()} active
                   </Badge>
                 )}
-                {getActiveFiltersCount(activeFilters) > 0 && (
+                {activeFiltersCount() > 0 && (
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="absolute -top-1 right-1 h-4 w-4 rounded-3xl bg-primary text-primary-foreground p-0"
                     onClick={e => {
                       e.stopPropagation()
                       clearAllFilters()
@@ -112,6 +128,7 @@ export default function TradesTable({
             onFiltersChange={handleFiltersChange}
             getActiveFiltersCount={() => getActiveFiltersCount(activeFilters)}
             clearAllFilters={clearAllFilters}
+            onFilterApply={onFilterApply}
           />
           {trades.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
@@ -132,7 +149,7 @@ export default function TradesTable({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {trades.map((trade, index) => (
+                  {filteredTrades.map((trade, index) => (
                     <TableRow
                       key={`${trade.id}-${index}`}
                       className="hover:bg-muted/50"

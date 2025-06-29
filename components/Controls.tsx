@@ -13,31 +13,27 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react'
-import { Trade, ConnectionStatus } from '@/types'
+import { Trade, ConnectionStatus, TradeSide } from '@/types'
 import { WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT } from '@/constants'
 
 interface ControlsProps {
   setTrades: React.Dispatch<React.SetStateAction<Trade[]>>
   maxTrades: number
-  parseTradeMessage: (data: any) => Trade | null
 }
 
-export default function Controls({
-  setTrades,
-  maxTrades,
-  parseTradeMessage,
-}: ControlsProps) {
+export default function Controls({ setTrades, maxTrades }: ControlsProps) {
   const [wsUrl, setWsUrl] = useState('')
-  const [connectionStatus, setConnectionStatus] =
-    useState<ConnectionStatus>('disconnected')
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
+    ConnectionStatus.DISCONNECTED
+  )
   const [error, setError] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
 
   const getStatusIcon = (status: ConnectionStatus) => {
     switch (status) {
-      case 'connected':
+      case ConnectionStatus.CONNECTED:
         return <Wifi className="h-4 w-4 ml-2" />
-      case 'connecting':
+      case ConnectionStatus.CONNECTING:
         return <Wifi className="h-4 w-4 ml-2 animate-pulse" />
       default:
         return <WifiOff className="h-4 w-4 ml-2" />
@@ -46,15 +42,30 @@ export default function Controls({
 
   const getStatusColor = (status: ConnectionStatus) => {
     switch (status) {
-      case 'connected':
+      case ConnectionStatus.CONNECTED:
         return 'bg-green-500'
-      case 'connecting':
+      case ConnectionStatus.CONNECTING:
         return 'bg-yellow-500'
-      case 'error':
+      case ConnectionStatus.ERROR:
         return 'bg-red-500'
       default:
         return 'bg-gray-500'
     }
+  }
+
+  const parseTradeMessage = (data: any): Trade | null => {
+    if (data && data.id) {
+      return {
+        id: data.id,
+        timestamp: data.timestamp,
+        symbol: data.symbol,
+        price: data.price,
+        size: data.size,
+        side: data.side as TradeSide,
+        exchange: data.exchange,
+      }
+    }
+    return null
   }
 
   const connect = useCallback(() => {
@@ -67,7 +78,7 @@ export default function Controls({
       wsRef.current.close()
     }
 
-    setConnectionStatus('connecting')
+    setConnectionStatus(ConnectionStatus.CONNECTING)
     setError(null)
 
     try {
@@ -75,7 +86,7 @@ export default function Controls({
       wsRef.current = ws
 
       ws.onopen = () => {
-        setConnectionStatus('connected')
+        setConnectionStatus(ConnectionStatus.CONNECTED)
         setError(null)
         console.log('WebSocket connected')
       }
@@ -87,7 +98,8 @@ export default function Controls({
 
           if (trade) {
             setTrades(prev => {
-              const newTrades = [trade, ...prev].slice(0, maxTrades)
+              // const newTrades = [trade, ...prev].slice(0, maxTrades)
+              const newTrades = [trade, ...prev]
               return newTrades
             })
           }
@@ -98,19 +110,19 @@ export default function Controls({
 
       ws.onerror = error => {
         console.error('WebSocket error:', error)
-        setConnectionStatus('error')
+        setConnectionStatus(ConnectionStatus.ERROR)
         setError('WebSocket connection error')
       }
 
       ws.onclose = event => {
-        setConnectionStatus('disconnected')
+        setConnectionStatus(ConnectionStatus.DISCONNECTED)
         if (event.code !== WS_CLOSE_NORMAL) {
           setError(`Connection closed: ${event.reason || 'Unknown reason'}`)
         }
         console.log('WebSocket disconnected')
       }
     } catch (err) {
-      setConnectionStatus('error')
+      setConnectionStatus(ConnectionStatus.ERROR)
       setError('Invalid WebSocket URL')
     }
   }, [wsUrl, maxTrades, parseTradeMessage, setTrades])
@@ -120,7 +132,7 @@ export default function Controls({
       wsRef.current.close(WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT)
       wsRef.current = null
     }
-    setConnectionStatus('disconnected')
+    setConnectionStatus(ConnectionStatus.DISCONNECTED)
     setError(null)
   }, [])
 
@@ -137,7 +149,6 @@ export default function Controls({
             {getStatusIcon(connectionStatus)}
           </Badge>
         </CardTitle>
-        {/* <CardDescription>Enter a URL to connect to a live trading feed</CardDescription> */}
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex gap-2">
@@ -148,7 +159,7 @@ export default function Controls({
             onKeyDown={e => e.key === 'Enter' && connect()}
             className="flex-1"
           />
-          {connectionStatus === 'connected' ? (
+          {connectionStatus === ConnectionStatus.CONNECTED ? (
             <Button
               onClick={disconnect}
               className="min-w-32"
@@ -160,7 +171,7 @@ export default function Controls({
             <Button
               onClick={connect}
               className="min-w-32"
-              disabled={connectionStatus === 'connecting'}
+              disabled={connectionStatus === ConnectionStatus.CONNECTING}
             >
               Connect
             </Button>

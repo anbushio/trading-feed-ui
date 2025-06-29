@@ -21,8 +21,5 @@ export interface FilterState {
   quantityRange: { min: number | null; max: number | null }
 }
 
-export type ConnectionStatus =
-  | 'disconnected'
-  | 'connecting'
-  | 'connected'
-  | 'error'
+// Re-export ConnectionStatus from constants for convenience
+export { ConnectionStatus } from '@/constants'

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Filter, X, ChevronUp, ChevronDown } from 'lucide-react'
 import { Button } from './ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card'
@@ -24,6 +24,7 @@ interface FilterTableProps {
   onFiltersChange?: (filters: FilterState) => void
   getActiveFiltersCount: () => number
   clearAllFilters: () => void
+  onFilterApply: () => void
 }
 
 export default function FilterTable({
@@ -32,9 +33,14 @@ export default function FilterTable({
   onFiltersChange,
   getActiveFiltersCount,
   clearAllFilters,
+  onFilterApply,
 }: FilterTableProps) {
   const [pendingFilters, setPendingFilters] =
     useState<FilterState>(INITIAL_FILTER)
+
+  useEffect(() => {
+    setPendingFilters(activeFilters)
+  }, [activeFilters])
 
   const hasPendingChanges = () => {
     return JSON.stringify(pendingFilters) !== JSON.stringify(activeFilters)
@@ -42,6 +48,12 @@ export default function FilterTable({
 
   const submitFilters = () => {
     onFiltersChange?.(pendingFilters)
+    onFilterApply()
+  }
+
+  const handleClearAll = () => {
+    setPendingFilters(INITIAL_FILTER)
+    clearAllFilters()
   }
 
   return (
@@ -222,7 +234,7 @@ export default function FilterTable({
           <div className="flex justify-end gap-2 mt-6 pt-4 border-t">
             <Button
               variant="outline"
-              onClick={clearAllFilters}
+              onClick={handleClearAll}
               disabled={getActiveFiltersCount() === 0 && !hasPendingChanges()}
             >
               Clear All
