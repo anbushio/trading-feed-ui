@@ -1,12 +1,25 @@
-"use client"
+'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Trash2, WifiOff } from "lucide-react"
-import { Trade } from "@/types"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Trash2, WifiOff } from 'lucide-react'
+import { Trade } from '@/types'
 
 interface TradesTableProps {
   trades: Trade[]
@@ -14,7 +27,11 @@ interface TradesTableProps {
   onClearTrades: () => void
 }
 
-export default function TradesTable({ trades, maxTrades, onClearTrades }: TradesTableProps) {
+export default function TradesTable({
+  trades,
+  maxTrades,
+  onClearTrades,
+}: TradesTableProps) {
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString()
   }
@@ -24,14 +41,14 @@ export default function TradesTable({ trades, maxTrades, onClearTrades }: Trades
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     }).format(price)
   }
 
   const formatQuantity = (size: number) => {
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 4,
-      maximumFractionDigits: 4
+      maximumFractionDigits: 4,
     }).format(size)
   }
 
@@ -56,7 +73,6 @@ export default function TradesTable({ trades, maxTrades, onClearTrades }: Trades
           <div className="text-center py-12 text-muted-foreground">
             <WifiOff className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>No trades received yet</p>
-            <p className="text-sm">Connect to a WebSocket feed to see live trades</p>
           </div>
         ) : (
           <ScrollArea className="h-[600px]">
@@ -73,19 +89,36 @@ export default function TradesTable({ trades, maxTrades, onClearTrades }: Trades
               </TableHeader>
               <TableBody>
                 {trades.map((trade, index) => (
-                  <TableRow key={`${trade.id}-${index}`} className="hover:bg-muted/50">
-                    <TableCell className="font-mono text-sm">{formatTime(trade.timestamp)}</TableCell>
-                    <TableCell className="font-semibold">{trade.symbol}</TableCell>
+                  <TableRow
+                    key={`${trade.id}-${index}`}
+                    className="hover:bg-muted/50"
+                  >
+                    <TableCell className="font-mono text-sm">
+                      {formatTime(trade.timestamp)}
+                    </TableCell>
+                    <TableCell className="font-semibold">
+                      {trade.symbol}
+                    </TableCell>
                     <TableCell>
                       <Badge
-                        variant={trade.side === "buy" ? "default" : "destructive"}
-                        className={trade.side === "buy" ? "bg-green-500 hover:bg-green-600" : ""}
+                        variant={
+                          trade.side === 'buy' ? 'default' : 'destructive'
+                        }
+                        className={
+                          trade.side === 'buy'
+                            ? 'bg-green-500 hover:bg-green-600'
+                            : ''
+                        }
                       >
                         {trade.side.toUpperCase()}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right font-mono">{formatPrice(trade.price)}</TableCell>
-                    <TableCell className="text-right font-mono">{formatQuantity(trade.size)}</TableCell>
+                    <TableCell className="text-right font-mono">
+                      {formatPrice(trade.price)}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {formatQuantity(trade.size)}
+                    </TableCell>
                     <TableCell className="text-right font-mono font-semibold">
                       {formatPrice(trade.price * trade.size)}
                     </TableCell>
@@ -98,4 +131,4 @@ export default function TradesTable({ trades, maxTrades, onClearTrades }: Trades
       </CardContent>
     </Card>
   )
-} 
+}

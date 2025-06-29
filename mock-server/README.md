@@ -13,17 +13,20 @@ This is a mock WebSocket server that simulates real-time trading data for develo
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 cd mock-server
 npm install
 ```
 
 2. Start the server:
+
 ```bash
 npm start
 ```
 
 Or for development with auto-restart:
+
 ```bash
 npm run dev
 ```
@@ -33,6 +36,7 @@ The server will start on `ws://localhost:8080`
 ## Usage
 
 In your trading feed application, connect to the mock server using:
+
 ```
 ws://localhost:8080
 ```
@@ -71,6 +75,7 @@ The server sends trade messages in the following format:
 ## Development
 
 The server generates realistic price data with:
+
 - Price volatility (±1% changes)
 - Realistic price ranges for each cryptocurrency
 - Random trade sizes (0.1 to 10.1)
@@ -79,4 +84,4 @@ The server generates realistic price data with:
 
 ## Stopping the Server
 
-Press `Ctrl+C` to gracefully shut down the server. 
+Press `Ctrl+C` to gracefully shut down the server.

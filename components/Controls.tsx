@@ -1,14 +1,20 @@
-"use client"
+'use client'
 
-import { useState, useRef, useCallback } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Wifi, WifiOff } from "lucide-react"
-import { Trade, ConnectionStatus } from "@/types"
-import { WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT } from "@/constants"
+import { useState, useRef, useCallback } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { AlertCircle, Wifi, WifiOff } from 'lucide-react'
+import { Trade, ConnectionStatus } from '@/types'
+import { WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT } from '@/constants'
 
 interface ControlsProps {
   setTrades: React.Dispatch<React.SetStateAction<Trade[]>>
@@ -19,18 +25,19 @@ interface ControlsProps {
 export default function Controls({
   setTrades,
   maxTrades,
-  parseTradeMessage
+  parseTradeMessage,
 }: ControlsProps) {
-  const [wsUrl, setWsUrl] = useState("")
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected")
+  const [wsUrl, setWsUrl] = useState('')
+  const [connectionStatus, setConnectionStatus] =
+    useState<ConnectionStatus>('disconnected')
   const [error, setError] = useState<string | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
 
   const getStatusIcon = (status: ConnectionStatus) => {
     switch (status) {
-      case "connected":
+      case 'connected':
         return <Wifi className="h-4 w-4 ml-2" />
-      case "connecting":
+      case 'connecting':
         return <Wifi className="h-4 w-4 ml-2 animate-pulse" />
       default:
         return <WifiOff className="h-4 w-4 ml-2" />
@@ -39,20 +46,20 @@ export default function Controls({
 
   const getStatusColor = (status: ConnectionStatus) => {
     switch (status) {
-      case "connected":
-        return "bg-green-500"
-      case "connecting":
-        return "bg-yellow-500"
-      case "error":
-        return "bg-red-500"
+      case 'connected':
+        return 'bg-green-500'
+      case 'connecting':
+        return 'bg-yellow-500'
+      case 'error':
+        return 'bg-red-500'
       default:
-        return "bg-gray-500"
+        return 'bg-gray-500'
     }
   }
 
   const connect = useCallback(() => {
     if (!wsUrl.trim()) {
-      setError("Please enter a WebSocket URL")
+      setError('Please enter a WebSocket URL')
       return
     }
 
@@ -60,7 +67,7 @@ export default function Controls({
       wsRef.current.close()
     }
 
-    setConnectionStatus("connecting")
+    setConnectionStatus('connecting')
     setError(null)
 
     try {
@@ -68,43 +75,43 @@ export default function Controls({
       wsRef.current = ws
 
       ws.onopen = () => {
-        setConnectionStatus("connected")
+        setConnectionStatus('connected')
         setError(null)
-        console.log("WebSocket connected")
+        console.log('WebSocket connected')
       }
 
-      ws.onmessage = (event) => {
+      ws.onmessage = event => {
         try {
           const data = JSON.parse(event.data)
           const trade = parseTradeMessage(data)
 
           if (trade) {
-            setTrades((prev) => {
+            setTrades(prev => {
               const newTrades = [trade, ...prev].slice(0, maxTrades)
               return newTrades
             })
           }
         } catch (err) {
-          console.error("Error processing message:", err)
+          console.error('Error processing message:', err)
         }
       }
 
-      ws.onerror = (error) => {
-        console.error("WebSocket error:", error)
-        setConnectionStatus("error")
-        setError("WebSocket connection error")
+      ws.onerror = error => {
+        console.error('WebSocket error:', error)
+        setConnectionStatus('error')
+        setError('WebSocket connection error')
       }
 
-      ws.onclose = (event) => {
-        setConnectionStatus("disconnected")
+      ws.onclose = event => {
+        setConnectionStatus('disconnected')
         if (event.code !== WS_CLOSE_NORMAL) {
-          setError(`Connection closed: ${event.reason || "Unknown reason"}`)
+          setError(`Connection closed: ${event.reason || 'Unknown reason'}`)
         }
-        console.log("WebSocket disconnected")
+        console.log('WebSocket disconnected')
       }
     } catch (err) {
-      setConnectionStatus("error")
-      setError("Invalid WebSocket URL")
+      setConnectionStatus('error')
+      setError('Invalid WebSocket URL')
     }
   }, [wsUrl, maxTrades, parseTradeMessage, setTrades])
 
@@ -113,7 +120,7 @@ export default function Controls({
       wsRef.current.close(WS_CLOSE_NORMAL, WS_CLOSE_USER_DISCONNECT)
       wsRef.current = null
     }
-    setConnectionStatus("disconnected")
+    setConnectionStatus('disconnected')
     setError(null)
   }, [])
 
@@ -122,8 +129,12 @@ export default function Controls({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           Connection
-          <Badge variant="outline" className={`ml-auto ${getStatusColor(connectionStatus)} text-white flex items-center`}>
-            <span className="mr-2">{connectionStatus.toUpperCase()}</span> {getStatusIcon(connectionStatus)}
+          <Badge
+            variant="outline"
+            className={`ml-auto ${getStatusColor(connectionStatus)} text-white flex items-center`}
+          >
+            <span className="mr-2">{connectionStatus.toUpperCase()}</span>{' '}
+            {getStatusIcon(connectionStatus)}
           </Badge>
         </CardTitle>
         {/* <CardDescription>Enter a URL to connect to a live trading feed</CardDescription> */}
@@ -133,16 +144,24 @@ export default function Controls({
           <Input
             placeholder="Enter a URL to connect to a live trading feed"
             value={wsUrl}
-            onChange={(e) => setWsUrl(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && connect()}
+            onChange={e => setWsUrl(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && connect()}
             className="flex-1"
           />
-          {connectionStatus === "connected" ? (
-            <Button onClick={disconnect} className="min-w-32" variant="destructive">
+          {connectionStatus === 'connected' ? (
+            <Button
+              onClick={disconnect}
+              className="min-w-32"
+              variant="destructive"
+            >
               Disconnect
             </Button>
           ) : (
-            <Button onClick={connect} className="min-w-32" disabled={connectionStatus === "connecting"}>
+            <Button
+              onClick={connect}
+              className="min-w-32"
+              disabled={connectionStatus === 'connecting'}
+            >
               Connect
             </Button>
           )}

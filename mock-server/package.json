@@ -14,7 +14,12 @@
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "keywords": ["websocket", "trading", "mock", "server"],
+  "keywords": [
+    "websocket",
+    "trading",
+    "mock",
+    "server"
+  ],
   "author": "",
   "license": "MIT"
-} 
+}

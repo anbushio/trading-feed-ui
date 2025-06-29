@@ -1,18 +1,26 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Header from "@/components/Header"
-import Controls from "@/components/Controls"
-import TradesTable from "@/components/TradesTable"
-import { Trade, TradeSide } from "@/types"
-import { MAX_TRADES, DEFAULT_EXCHANGE } from "@/constants"
+import { useState } from 'react'
+import Header from '@/components/Header'
+import Controls from '@/components/Controls'
+import TradesTable from '@/components/TradesTable'
+import { Trade, TradeSide } from '@/types'
+import { MAX_TRADES, DEFAULT_EXCHANGE } from '@/constants'
 
 export default function Dashboard() {
   const [trades, setTrades] = useState<Trade[]>([])
 
   const parseTradeMessage = (data: any): Trade | null => {
     // Handle mock server message format
-    if (data && data.id && data.symbol && data.price && data.size && data.side && data.exchange) {
+    if (
+      data &&
+      data.id &&
+      data.symbol &&
+      data.price &&
+      data.size &&
+      data.side &&
+      data.exchange
+    ) {
       return {
         id: data.id,
         timestamp: data.timestamp,
@@ -20,7 +28,7 @@ export default function Dashboard() {
         price: data.price,
         size: data.size,
         side: data.side as TradeSide,
-        exchange: data.exchange
+        exchange: data.exchange,
       }
     }
     return null
@@ -42,7 +50,7 @@ export default function Dashboard() {
           parseTradeMessage={parseTradeMessage}
         />
         {/* Trades feed */}
-        <TradesTable 
+        <TradesTable
           trades={trades}
           maxTrades={MAX_TRADES}
           onClearTrades={clearTrades}
