@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid')
 const wss = new WebSocket.Server({ port: 8080 })
 
 // Trading symbols to simulate
-const symbols = ['BTC/USD', 'ETH/USD', 'ADA/USD', 'DOT/USD', 'LINK/USD']
+const symbols = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT', 'DOT/USDT', 'LINK/USDT']
 const exchanges = ['Binance', 'Coinbase', 'Kraken', 'Bitfinex']
 
 // Generate random trade data

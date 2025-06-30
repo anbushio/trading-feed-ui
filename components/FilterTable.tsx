@@ -91,8 +91,8 @@ export default function FilterTable({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Symbols</SelectItem>
-                  <SelectItem value="BTCUSDT">BTCUSDT</SelectItem>
-                  <SelectItem value="ETHUSDT">ETHUSDT</SelectItem>
+                  <SelectItem value="BTC/USDT">BTC/USDT</SelectItem>
+                  <SelectItem value="ETH/USDT">ETH/USDT</SelectItem>
                 </SelectContent>
               </Select>
             </div>
